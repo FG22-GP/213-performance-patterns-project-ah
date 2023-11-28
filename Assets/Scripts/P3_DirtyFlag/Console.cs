@@ -16,6 +16,8 @@ public class Console : MonoBehaviour
     private Color _computedColor;
     private int _tick;
 
+    private bool _isDirty;
+
 #region information on how many updates would've been necessary
     private Color _previousColor; // IGNORE THIS
     private static int _totalUpdateCount; // IGNORE THIS
@@ -64,8 +66,7 @@ public class Console : MonoBehaviour
     void SetRed(int red)
     {
         this._redParameter = red;
-        // When the parameter has changed, the computed parameter needs to be updated
-        CalculateComputedDataFromParameters();
+        this._isDirty = true;
     }
 
     /// <summary>
@@ -75,8 +76,7 @@ public class Console : MonoBehaviour
     void SetGreen(int green)
     {
         this._greenParameter = green;
-        // When the parameter has changed, the computed parameter needs to be updated
-        CalculateComputedDataFromParameters();
+        this._isDirty = true;
     }
 
     /// <summary>
@@ -86,8 +86,7 @@ public class Console : MonoBehaviour
     void SetBlue(int blue)
     {
         this._blueParameter = blue;
-        // When the parameter has changed, the computed parameter needs to be updated
-        CalculateComputedDataFromParameters();
+        this._isDirty = true;
     }
 
     /// <summary>
@@ -101,6 +100,7 @@ public class Console : MonoBehaviour
     {
         _totalUpdateCount++;
         this._computedColor = new Color(_redParameter / 255f, _greenParameter / 255f, _blueParameter / 255f);
+        this._isDirty = false;
         Thread.Sleep(1); // DO NOT REMOVE
     }
 
@@ -120,7 +120,10 @@ public class Console : MonoBehaviour
         } // IGNORE THIS
         Debug.Log($"Updated: {_totalUpdateCount}/{_requiredUpdateCount} times."); // IGNORE THIS
         #endregion // debug information on how many updates would've been necessary
-            
+
+        if (this._isDirty)
+            CalculateComputedDataFromParameters();
+
         this._spriteRenderer.color = this._computedColor;
     }
 }
