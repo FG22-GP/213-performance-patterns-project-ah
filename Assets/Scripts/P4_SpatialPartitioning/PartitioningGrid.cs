@@ -32,7 +32,7 @@ public class PartitioningGrid
     }
 
     //Returns {-1, -1} if location is out of bounds.
-    public Vector2Int GetCellIndexAtWorldLocation(float x, float y)
+    public Vector2Int GetCellCoordinateAtWorldLocation(float x, float y)
     {
         if (x < _upperLeft.x || x > _lowerRight.x || y < _lowerRight.y || y > _upperLeft.y)
             return new Vector2Int(-1, -1);
@@ -44,7 +44,7 @@ public class PartitioningGrid
         return new Vector2Int(xIndex, yIndex);
     }
 
-    public List<T> GetObjectsInRadius<T>(int xIndex, int yIndex, int radius) where T : MonoBehaviour
+    private List<T> GetObjectsInRadius<T>(int xIndex, int yIndex, int radius) where T : MonoBehaviour
     {
         if (xIndex < 0 || yIndex < 0 || xIndex > Cells.GetLength(0) || yIndex > Cells.GetLength(1))
             return new List<T>();

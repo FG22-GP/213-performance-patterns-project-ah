@@ -35,7 +35,7 @@ public class Player : MonoBehaviour
     {  
         if (_spawner != null)
         {
-            Vector2Int gridPosition = _spawner.Grid.GetCellIndexAtWorldLocation(transform.position.x, transform.position.y);
+            Vector2Int gridPosition = _spawner.Grid.GetCellCoordinateAtWorldLocation(transform.position.x, transform.position.y);
 
             if (gridPosition.x < 0 || gridPosition.y < 0) return null;
 

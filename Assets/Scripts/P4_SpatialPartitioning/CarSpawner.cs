@@ -32,7 +32,7 @@ public class CarSpawner : MonoBehaviour
         var randomPositionX = Random.Range(-60f, 60f);
         var randomPositionY = Random.Range(-60f, 60f);
         Car SpawnedCar = Instantiate(this.CarPrefab, new Vector2(randomPositionX, randomPositionY), Quaternion.Euler(0, 0, Random.Range(0, 360)));
-        Vector2Int GridIndices = Grid.GetCellIndexAtWorldLocation(randomPositionX, randomPositionY);
+        Vector2Int GridIndices = Grid.GetCellCoordinateAtWorldLocation(randomPositionX, randomPositionY);
         Grid.Cells[GridIndices.x, GridIndices.y].Contents.Add(SpawnedCar);
     }
 }
