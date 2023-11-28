@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using Input = UnityEngine.Input;
@@ -5,6 +6,8 @@ using Input = UnityEngine.Input;
 public class Player : MonoBehaviour
 {
     private Camera _cam;
+
+    [SerializeField] private CarSpawner _spawner;
 
     void Start()
     {
@@ -29,23 +32,48 @@ public class Player : MonoBehaviour
     }
 
     GameObject FindClosestCar()
-    {
-        var allCars = GameObject.FindGameObjectsWithTag("Car");
-        GameObject closestCar = null;
-        float distance = float.PositiveInfinity;
-        
-        // Problem: We need to check all cars in the scene to find the closest one.
-        foreach (var car in allCars)
+    {  
+        if (_spawner != null)
         {
-            var currentDistance = CalculateDistanceTo(car.transform);
-            if (currentDistance < distance)
-            {
-                distance = currentDistance;
-                closestCar = car;
-            }
-        }
+            Vector2Int gridPosition = _spawner.Grid.GetCellIndexAtWorldLocation(transform.position.x, transform.position.y);
 
-        return closestCar;
+            if (gridPosition.x < 0 || gridPosition.y < 0) return null;
+
+            List<Car> cars = _spawner.Grid.GetObjectsInNearestRadius<Car>(gridPosition.x, gridPosition.y, 1);
+            Car closestCar = null;
+            float distance = float.PositiveInfinity;
+
+            foreach (var car in cars)
+            {
+                var currentDistance = CalculateDistanceTo(car.transform);
+                if (currentDistance < distance)
+                {
+                    distance = currentDistance;
+                    closestCar = car;
+                }
+            }
+            return closestCar != null ? closestCar.gameObject : null;
+        }
+        else
+        {
+            var allCars = GameObject.FindGameObjectsWithTag("Car");
+            GameObject closestCar = null;
+            float distance = float.PositiveInfinity;
+
+            // Problem: We need to check all cars in the scene to find the closest one.
+            foreach (var car in allCars)
+            {
+                var currentDistance = CalculateDistanceTo(car.transform);
+                if (currentDistance < distance)
+                {
+                    distance = currentDistance;
+                    closestCar = car;
+                }
+            }
+
+            return closestCar;
+        }
+        
     }
 
     float CalculateDistanceTo(Transform target)
