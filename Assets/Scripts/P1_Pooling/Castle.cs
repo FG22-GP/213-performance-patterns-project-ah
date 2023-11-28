@@ -1,3 +1,4 @@
+using P1_Pooling;
 using UnityEngine;
 
 public class Castle : MonoBehaviour
@@ -9,7 +10,14 @@ public class Castle : MonoBehaviour
     private float _currentCooldown;
     
     const float _maxCooldown = 0.8f;
+    
+    private ObjectPool<Projectile> _projectilePool;
 
+
+    private void Awake()
+    {
+        _projectilePool = new ObjectPool<Projectile>(new []{Projectile}, 20);
+    }
 
     void Start()
     {
@@ -41,7 +49,10 @@ public class Castle : MonoBehaviour
 
     void Attack()
     {
-        Instantiate(this.Projectile, this.transform.position, GetTargetDirection());
+        //Instantiate(this.Projectile, this.transform.position, GetTargetDirection());
+        var projectile = _projectilePool.Get();
+        projectile.transform.position = transform.position;
+        projectile.transform.rotation = GetTargetDirection();
     }
 
     Quaternion GetTargetDirection()

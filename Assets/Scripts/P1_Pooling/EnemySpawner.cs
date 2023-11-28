@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using P1_Pooling;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -9,6 +7,13 @@ public class EnemySpawner : MonoBehaviour
     public Enemy EnemyPrefab;
     private const float _totalCooldown = 2f;
     private float _currentCooldown;
+    
+    private ObjectPool<Enemy> _enemyPool;
+
+    private void Awake()
+    {
+        _enemyPool = new ObjectPool<Enemy>(new []{EnemyPrefab}, 10);
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -20,7 +25,6 @@ public class EnemySpawner : MonoBehaviour
             SpawnEnemies();
         }
     }
-
 
     void SpawnEnemies()
     {
@@ -36,6 +40,8 @@ public class EnemySpawner : MonoBehaviour
     {
         var randomPositionX = Random.Range(-6f, 6f);
         var randomPositionY = Random.Range(-6f, 6f);
-        Instantiate(this.EnemyPrefab, new Vector2(randomPositionX, randomPositionY), Quaternion.identity);
+        //Instantiate(this.EnemyPrefab, new Vector2(randomPositionX, randomPositionY), Quaternion.identity);
+        var enemy = _enemyPool.Get();
+        enemy.transform.position = new Vector2(randomPositionX, randomPositionY);
     }
 }
