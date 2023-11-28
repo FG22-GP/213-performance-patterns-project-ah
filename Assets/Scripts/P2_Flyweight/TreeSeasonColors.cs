@@ -10,22 +10,21 @@ public class TreeSeasonColors
     /// This returns the current color. The value changes every time
     /// `MoveNext` is invoked.
     /// </summary>
-    public Color CurrentColor
+    public Color CurrentColor(int index)
     {
-        get
-        {
-            var colorInfo = colors[_index];
-            return new Color(colorInfo.r, colorInfo.g, colorInfo.b, 1f);
-        }
+
+            var colorInfo = colors[index];
+            return new Color(colorInfo.r / 255.0f, colorInfo.g / 255.0f, colorInfo.b / 255.0f, 1f);
     }
 
     /// <summary>
     /// This makes the Tree move on to the next color
     /// </summary>
-    public void MoveNext()
+    public int MoveNext(int index)
     {
-        _index += 10;
-        _index %= colors.Length;
+        index += 10;
+        index %= colors.Length;
+        return index;
     }
 
     private int _index;

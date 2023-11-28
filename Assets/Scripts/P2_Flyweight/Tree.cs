@@ -3,13 +3,15 @@ using UnityEngine;
 public class Tree : MonoBehaviour
 {
     private SpriteRenderer _spriteRenderer;
-    private TreeSeasonColors _treeColors;
+    private TreeSpawner _spawner;
+    // private TreeSeasonColors _treeColors;
     private int _tick;
+    private int _index;
     
     void Start()
     {
         this._spriteRenderer = GetComponent<SpriteRenderer>();
-        LoadColorInfos();
+        // LoadColorInfos();
         UpdateSeason();
     }
     
@@ -23,15 +25,18 @@ public class Tree : MonoBehaviour
     /// Each tree needs to access their colors depending on how old they are.
     /// Unfortunately, this solution uses up a lot of Memory :(
     /// </summary>
-    void LoadColorInfos()
-    {
-        var fileContents = Resources.Load<TextAsset>("treeColors").text;
-        this._treeColors = JsonUtility.FromJson<TreeSeasonColors>(fileContents);
-    }
+
+    // void LoadColorInfos()
+    // {
+    //     var fileContents = Resources.Load<TextAsset>("treeColors").text;
+    //     this._treeColors = JsonUtility.FromJson<TreeSeasonColors>(fileContents);
+    // }
 
     void UpdateSeason()
     {
-        this._treeColors.MoveNext();
-        this._spriteRenderer.color = this._treeColors.CurrentColor;
+        _index = _spawner.GetColors().MoveNext(_index);
+        this._spriteRenderer.color = _spawner.GetColors().CurrentColor(_index);
     }
+
+    public void SetSpawner(TreeSpawner spawner) => _spawner = spawner;
 }
