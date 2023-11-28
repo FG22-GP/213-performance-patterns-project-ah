@@ -16,7 +16,7 @@ public class Console : MonoBehaviour
     private Color _computedColor;
     private int _tick;
 
-    private bool _isDirty;
+    private bool _isDirty = true;
 
 #region information on how many updates would've been necessary
     private Color _previousColor; // IGNORE THIS
